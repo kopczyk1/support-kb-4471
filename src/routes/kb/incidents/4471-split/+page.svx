@@ -1,0 +1,43 @@
+---
+layout: runbook
+title: '#4471 · one ticket, three problems'
+owner: support desk
+status: proposed
+reviewed: 2026-10-29
+signature: kopczyk1 with Claude Sonnet 5.5
+---
+
+<script>
+  import SplitTable from '#lib/kb/SplitTable.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+<Callout>
+#4471 is not one bug. It holds three problems with three different fixes. One fix will not close the ticket.
+</Callout>
+
+The ticket says: the parser reads dates month first, our tenants write day first. That is true for most of the
+**412 reports**. It is not true for all of them.
+
+## What is inside
+
+<SplitTable ticket={4471} />
+
+1. **`parser`: 374 reports, 11 tenants.** The shared parser reads every date month first. Day-first tenants see day and month swapped (7 April becomes 4 July). This is the cause the ticket names.
+2. **`hint`: 33 reports, 3 tenants** (`alder.physio`, `copper.studio`, `pale.harbour`). These tenants run `booking-v3`. Its form prints `MM/DD/YYYY` under the date field, so day-first people type month first. The parser is not at fault. The hint is. Fixing the parser does not help them, and it can make them worse.
+3. **`oneDay`: 5 reports, 5 tenants.** Not a swap. The date is exactly one day off (Tuesday 12 May shows as Monday 11 May). The desk flagged these in `desk-notes.json`: `R-41202`, `R-41209`, `R-41236`, `R-41344`, `R-41620`. The reports hint at a time zone or daylight saving error, not at a parser error.
+
+## How we counted
+
+- The export has 427 rows but 412 unique ids. We count each id once.
+- We placed each report by its **tenant** (locale and booking form), not by `intakeTag`. Intake guesses from the reporter's browser. It tagged 23 `parser` reports as `hint` and 15 `hint` reports as `parser`.
+- The five one-day reports were all filed under `parser` by tenant. We pulled them out.
+
+## What to do
+
+- Keep #4471 for `parser` only.
+- Open one ticket for `hint` and one for `oneDay`.
+- Do not tell the 33 `booking-v3` reporters that a queued parser fix covers them.
+
+<RenderStamp {signature} />

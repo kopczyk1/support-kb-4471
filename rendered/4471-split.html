@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>#4471 · one ticket, three problems · support kb</title>
+<style>
+  :root { --bg:#fbfaf7; --fg:#1d1d1b; --muted:#6b6a66; --line:#e3e0d8; --accent:#2f6f5e; --warn:#b4501f; --warn-bg:#fbeee6; --note-bg:#eef5f2; --mono:ui-monospace,'Cascadia Code',Menlo,monospace; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#171716; --fg:#ecebe6; --muted:#9c9a93; --line:#34332f; --accent:#6fbfa6; --warn:#f0905d; --warn-bg:#3a2418; --note-bg:#1d2c27; } }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 system-ui,sans-serif; }
+  table { border-collapse:collapse; width:100%; margin:1rem 0; font-size:.92rem; }
+  th, td { border-bottom:1px solid var(--line); padding:.35rem .5rem; text-align:left; }
+  code { font-family:var(--mono); font-size:.88em; }
+  a { color:var(--accent); }
+  .kb { max-width:760px; margin:0 auto; padding:2rem 16px 4rem; }
+  .crumb { font:.8rem var(--mono); text-decoration:none; color:var(--muted); }
+  h1 { margin:.25rem 0 .5rem; line-height:1.2; }
+  .meta { display:flex; flex-wrap:wrap; gap:.5rem 1rem; color:var(--muted); font-size:.85rem; margin:0; }
+  .status { border:1px solid var(--line); border-radius:99px; padding:0 .6rem; }
+  .callout { background:var(--note-bg); border-left:4px solid var(--accent); padding:.6rem 1rem; border-radius:6px; margin:1rem 0; }
+  .sum { font-size:1.1rem; }
+  .stamp { margin:2rem 0 0; font:.85rem var(--mono); color:var(--muted); }
+  .stamp b { color:var(--accent); letter-spacing:.04em; }
+  footer { margin-top:3rem; color:var(--muted); font-size:.8rem; border-top:1px solid var(--line); padding-top:1rem; }
+</style>
+</head>
+<body>
+<div class="kb">
+  <header>
+    <a class="crumb" href="/kb">support desk · kb</a>
+    <h1>#4471 · one ticket, three problems</h1>
+    <p class="meta"><span>owner <b>support desk</b></span><span class="status proposed">proposed</span><span>reviewed 2026-10-29 · 0 days ago</span></p>
+  </header>
+  <main>
+    <div class="callout">#4471 is not one bug. It holds three problems with three different fixes. One fix will not close the ticket.</div>
+    <p>The ticket says: the parser reads dates month first, our tenants write day first. That is true for most of the <strong>412 reports</strong>. It is not true for all of them.</p>
+
+    <h2>What is inside</h2>
+    <p class="sum"><strong>412</strong> reports, <strong>3</strong> problems</p>
+    <table>
+      <thead><tr><th>problem</th><th>reports</th><th>tenants</th></tr></thead>
+      <tbody>
+        <tr><td><code>parser</code></td><td>374</td><td>11</td></tr>
+        <tr><td><code>hint</code></td><td>33</td><td>3</td></tr>
+        <tr><td><code>oneDay</code></td><td>5</td><td>5</td></tr>
+      </tbody>
+    </table>
+    <ol>
+      <li><strong><code>parser</code>: 374 reports, 11 tenants.</strong> The shared parser reads every date month first. Day-first tenants see day and month swapped (7 April becomes 4 July). This is the cause the ticket names.</li>
+      <li><strong><code>hint</code>: 33 reports, 3 tenants</strong> (<code>alder.physio</code>, <code>copper.studio</code>, <code>pale.harbour</code>). These tenants run <code>booking-v3</code>. Its form prints <code>MM/DD/YYYY</code> under the date field, so day-first people type month first. The parser is not at fault. The hint is. Fixing the parser does not help them, and it can make them worse.</li>
+      <li><strong><code>oneDay</code>: 5 reports, 5 tenants.</strong> Not a swap. The date is exactly one day off (Tuesday 12 May shows as Monday 11 May). The desk flagged these in <code>desk-notes.json</code>: <code>R-41202</code>, <code>R-41209</code>, <code>R-41236</code>, <code>R-41344</code>, <code>R-41620</code>. The reports hint at a time zone or daylight saving error, not at a parser error.</li>
+    </ol>
+
+    <h2>How we counted</h2>
+    <ul>
+      <li>The export has 427 rows but 412 unique ids. We count each id once.</li>
+      <li>We placed each report by its <strong>tenant</strong> (locale and booking form), not by <code>intakeTag</code>. Intake guesses from the reporter's browser. It tagged 23 <code>parser</code> reports as <code>hint</code> and 15 <code>hint</code> reports as <code>parser</code>.</li>
+      <li>The five one-day reports were all filed under <code>parser</code> by tenant. We pulled them out.</li>
+    </ul>
+
+    <h2>What to do</h2>
+    <ul>
+      <li>Keep #4471 for <code>parser</code> only.</li>
+      <li>Open one ticket for <code>hint</code> and one for <code>oneDay</code>.</li>
+      <li>Do not tell the 33 <code>booking-v3</code> reporters that a queued parser fix covers them.</li>
+    </ul>
+
+    <p class="stamp">desk ref <b>DR-5GQ8-8CQP</b></p>
+  </main>
+  <footer>Pages are written by people. Tables and charts are built from data at render time.</footer>
+</div>
+</body>
+</html>
