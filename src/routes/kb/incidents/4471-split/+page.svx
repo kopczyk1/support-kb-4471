@@ -4,7 +4,7 @@ title: '#4471 · one ticket, three problems'
 owner: support desk
 status: proposed
 reviewed: 2026-10-29
-signature: kopczyk1 with Claude Sonnet 5.5
+signature: v1.eyJzdWIiOiIyOTI5IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTMzMTA4MzYsImV4cCI6MTc5MzM5NzIzNn0.1nkindj0I2kvEofid6S5ncbMJaVTdAz1mSkwt_5Uyu8
 ---
 
 <script>
