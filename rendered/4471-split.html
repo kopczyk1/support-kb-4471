@@ -36,17 +36,17 @@
     <p>The ticket says: the parser reads dates month first, our tenants write day first. That is true for most of the <strong>412 reports</strong>. It is not true for all of them.</p>
 
     <h2>What is inside</h2>
-    <p class="sum"><strong>412</strong> reports, <strong>3</strong> problems</p>
+    <p class="sum"><strong>412</strong> reports, <strong>3</strong> problems (the one-day reports are also counted under their cause)</p>
     <table>
       <thead><tr><th>problem</th><th>reports</th><th>tenants</th></tr></thead>
       <tbody>
-        <tr><td><code>parser</code></td><td>374</td><td>11</td></tr>
+        <tr><td><code>parser</code></td><td>379</td><td>11</td></tr>
         <tr><td><code>hint</code></td><td>33</td><td>3</td></tr>
         <tr><td><code>oneDay</code></td><td>5</td><td>5</td></tr>
       </tbody>
     </table>
     <ol>
-      <li><strong><code>parser</code>: 374 reports, 11 tenants.</strong> The shared parser reads every date month first. Day-first tenants see day and month swapped (7 April becomes 4 July). This is the cause the ticket names.</li>
+      <li><strong><code>parser</code>: 379 reports, 11 tenants.</strong> The shared parser reads every date month first. Day-first tenants see day and month swapped (7 April becomes 4 July). This is the cause the ticket names.</li>
       <li><strong><code>hint</code>: 33 reports, 3 tenants</strong> (<code>alder.physio</code>, <code>copper.studio</code>, <code>pale.harbour</code>). These tenants run <code>booking-v3</code>. Its form prints <code>MM/DD/YYYY</code> under the date field, so day-first people type month first. The parser is not at fault. The hint is. Fixing the parser does not help them, and it can make them worse.</li>
       <li><strong><code>oneDay</code>: 5 reports, 5 tenants.</strong> Not a swap. The date is exactly one day off (Tuesday 12 May shows as Monday 11 May). The desk flagged these in <code>desk-notes.json</code>: <code>R-41202</code>, <code>R-41209</code>, <code>R-41236</code>, <code>R-41344</code>, <code>R-41620</code>. The reports hint at a time zone or daylight saving error, not at a parser error.</li>
     </ol>
@@ -55,12 +55,12 @@
     <ul>
       <li>The export has 427 rows but 412 unique ids. We count each id once.</li>
       <li>We placed each report by its <strong>tenant</strong> (locale and booking form), not by <code>intakeTag</code>. Intake guesses from the reporter's browser. It tagged 23 <code>parser</code> reports as <code>hint</code> and 15 <code>hint</code> reports as <code>parser</code>.</li>
-      <li>The five one-day reports were all filed under <code>parser</code> by tenant. We pulled them out.</li>
+      <li>The desk files the five one-day reports under <code>parser</code>, by tenant. They stay in the 379 and are footnoted. They are also listed as problem 3, so 379 + 33 = 412 and the 5 are not added again.</li>
     </ul>
 
     <h2>What to do</h2>
     <ul>
-      <li>Keep #4471 for <code>parser</code> only.</li>
+      <li>Keep #4471 for <code>parser</code> only (379 reports, 5 of them read as a one-day move).</li>
       <li>Open one ticket for <code>hint</code> and one for <code>oneDay</code>.</li>
       <li>Do not tell the 33 <code>booking-v3</code> reporters that a queued parser fix covers them.</li>
     </ul>

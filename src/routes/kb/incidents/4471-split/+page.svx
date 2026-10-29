@@ -24,7 +24,7 @@ The ticket says: the parser reads dates month first, our tenants write day first
 
 <SplitTable ticket={4471} />
 
-1. **`parser`: 374 reports, 11 tenants.** The shared parser reads every date month first. Day-first tenants see day and month swapped (7 April becomes 4 July). This is the cause the ticket names.
+1. **`parser`: 379 reports, 11 tenants.** The shared parser reads every date month first. Day-first tenants see day and month swapped (7 April becomes 4 July). This is the cause the ticket names.
 2. **`hint`: 33 reports, 3 tenants** (`alder.physio`, `copper.studio`, `pale.harbour`). These tenants run `booking-v3`. Its form prints `MM/DD/YYYY` under the date field, so day-first people type month first. The parser is not at fault. The hint is. Fixing the parser does not help them, and it can make them worse.
 3. **`oneDay`: 5 reports, 5 tenants.** Not a swap. The date is exactly one day off (Tuesday 12 May shows as Monday 11 May). The desk flagged these in `desk-notes.json`: `R-41202`, `R-41209`, `R-41236`, `R-41344`, `R-41620`. The reports hint at a time zone or daylight saving error, not at a parser error.
 
@@ -32,11 +32,11 @@ The ticket says: the parser reads dates month first, our tenants write day first
 
 - The export has 427 rows but 412 unique ids. We count each id once.
 - We placed each report by its **tenant** (locale and booking form), not by `intakeTag`. Intake guesses from the reporter's browser. It tagged 23 `parser` reports as `hint` and 15 `hint` reports as `parser`.
-- The five one-day reports were all filed under `parser` by tenant. We pulled them out.
+- The desk files the five one-day reports under `parser`, by tenant. They stay in the 379 and are footnoted. They are also listed as problem 3, so 379 + 33 = 412 and the 5 are not added again.
 
 ## What to do
 
-- Keep #4471 for `parser` only.
+- Keep #4471 for `parser` only (379 reports, 5 of them read as a one-day move).
 - Open one ticket for `hint` and one for `oneDay`.
 - Do not tell the 33 `booking-v3` reporters that a queued parser fix covers them.
 
